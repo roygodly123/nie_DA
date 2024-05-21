@@ -13,7 +13,8 @@
    git clone https://github.com/roygodly123/nie_DA.git
 2. ```sh
    cd nie_DA.git
-3. navigate to virtual env.
+3. ```sh
+   navigate to virtual env.
 4. ```sh
    pip install -r requirements.txt
 ### Usage
