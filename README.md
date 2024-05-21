@@ -11,3 +11,4 @@
 1. The csv file directory includes original dataset and cleaned file.
 2. The src file directory includes all source code for manipulating the data.
 3. The results file directory includes pre-run results.(marked by 1,2,3,4, and a significance file is optional)
+4. The csv results are saved by ANSI encoding, if it does not work for your computer, set encoding to UTF-8 and try.
