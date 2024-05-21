@@ -9,7 +9,7 @@ plt.rcParams['font.sans-serif'] = ['SimHei']
 plt.rcParams['axes.unicode_minus'] = False
 
 # read file and clean data which include strange values
-df = pd.read_csv('../csv/data_nie_v7.csv')
+df = pd.read_csv('csv/data_nie_v7.csv')
 columns_to_clean = ['probnpmax', 'ctnimax']
 
 
@@ -55,5 +55,5 @@ for column in columns_to_clean:
 for column in columns_to_clean:
     df[column] = pd.to_numeric(df[column], errors='coerce')
 
-cleaned_file_path = '../csv/data_nie_cleaned_file.csv'
+cleaned_file_path = 'csv/data_nie_cleaned_file.csv'
 df.to_csv(cleaned_file_path, index=False)
