@@ -9,7 +9,7 @@ plt.rcParams['font.sans-serif'] = ['SimHei']
 plt.rcParams['axes.unicode_minus'] = False
 
 # Read file and clean data which includes strange values
-df = pd.read_csv('../csv/data_nie_cleaned_file.csv')
+df = pd.read_csv('csv/data_nie_cleaned_file.csv')
 
 # Split data into two periods
 df_before_2018 = df[df['year'] < 2018].copy()
@@ -60,8 +60,8 @@ results_df = pd.DataFrame(results).T
 print(results_df)
 
 # Save results to CSV file
-results_df.to_csv('../results/1. before_and_after_2018.csv', encoding='ansi')
-
+results_df.to_csv('results/1. before_and_after_2018.csv', encoding='utf-8-sig', index=False)
+results_df.to_csv('results/(optional) 1. before_and_after_2018.csv', encoding='ansi', index=False)
 # Define significance level
 alpha = 0.05
 
@@ -79,22 +79,13 @@ for indicator, result in results.items():
         print(
             f"{indicator} 的t统计量为 {t_statistic}，p值为 {p_value}，在显著性水平 {alpha} 下，两组数据之间没有显著差异。")
 
-# Data visualization (uncomment to visualize)
-# for indicator in indicators:
-#     df_clean['period'] = df['year'].apply(lambda x: 'Before 2018' if x < 2018 else 'After 2018')
-#     plt.figure(figsize=(10, 6))
-#     sns.boxplot(x='period', y=indicator, data=df_clean)
-#     plt.title(f'Boxplot of {indicator} Before and After 2018')
-#     plt.xlabel('Period')
-#     plt.ylabel(indicator)
-#     plt.show()
 
 # Plotting box plots for each clinical indicator to compare distributions before and after 2018
-for indicator in indicators:
-    plt.figure(figsize=(10, 6))
-    sns.boxplot(x='Indicator Period', y=indicator, data=pd.concat([df_before_2018[[indicator]].assign(**{'Indicator Period': 'Before 2018'}),
-                                                                  df_after_2018[[indicator]].assign(**{'Indicator Period': 'After 2018'})]))
-    plt.title(f'Comparison of {indicator} Before and After 2018')
-    plt.xlabel('Indicator Period')
-    plt.ylabel(indicator)
-    plt.show()
+# for indicator in indicators:
+#     plt.figure(figsize=(10, 6))
+#     sns.boxplot(x='Indicator Period', y=indicator, data=pd.concat([df_before_2018[[indicator]].assign(**{'Indicator Period': 'Before 2018'}),
+#                                                                   df_after_2018[[indicator]].assign(**{'Indicator Period': 'After 2018'})]))
+#     plt.title(f'Comparison of {indicator} Before and After 2018')
+#     plt.xlabel('Indicator Period')
+#     plt.ylabel(indicator)
+#     plt.show()

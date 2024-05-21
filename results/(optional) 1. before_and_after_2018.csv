@@ -1,4 +1,4 @@
-﻿t_statistic,p_value,mean_before_2018,variance_before_2018,mean_after_2018,variance_after_2018
+t_statistic,p_value,mean_before_2018,variance_before_2018,mean_after_2018,variance_after_2018
 1.432,0.152,79.142,1429.789,74.646,1085.136
 -0.614,0.539,44.0,42.286,47.323,233.456
 0.32,0.749,61.0,58.2,59.969,113.758

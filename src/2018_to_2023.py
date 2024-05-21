@@ -10,7 +10,7 @@ plt.rcParams['font.sans-serif'] = ['SimHei']
 plt.rcParams['axes.unicode_minus'] = False
 
 # Read the cleaned data
-df = pd.read_csv('../csv/data_nie_cleaned_file.csv')
+df = pd.read_csv('csv/data_nie_cleaned_file.csv')
 
 # Define the years of interest
 years = [2018, 2019, 2020, 2021, 2022, 2023]
@@ -55,7 +55,7 @@ for var in clinical_indicators:
     clinical_significance.append({'indicator': var, 'p_value': p_value, 'significance': significance})
 
 # Create an Excel workbook and worksheet using xlsxwriter
-workbook = xlsxwriter.Workbook('../results/3. clinical_results_and_significance_2018_2023.xlsx', {'nan_inf_to_errors': True})
+workbook = xlsxwriter.Workbook('results/3. clinical_results_and_significance_2018_2023.xlsx', {'nan_inf_to_errors': True})
 worksheet = workbook.add_worksheet()
 
 # Construct the header
@@ -100,23 +100,23 @@ workbook.close()
 
 
 # Plot the trends of clinical indicators over the years
-for var in clinical_indicators:
-    plt.figure(figsize=(10, 6))
-    for year in years:
-        sns.lineplot(x='year', y=var, data=df_after_2018[df_after_2018['year'] == year], label=str(year))
-    plt.title(f'Trends of {var} (2018-2023)')
-    plt.xlabel('Year')
-    plt.ylabel(var)
-    plt.legend(title='Year')
-    plt.show()
+# for var in clinical_indicators:
+#     plt.figure(figsize=(10, 6))
+#     for year in years:
+#         sns.lineplot(x='year', y=var, data=df_after_2018[df_after_2018['year'] == year], label=str(year))
+#     plt.title(f'Trends of {var} (2018-2023)')
+#     plt.xlabel('Year')
+#     plt.ylabel(var)
+#     plt.legend(title='Year')
+#     plt.show()
 
 # Compare distributions between different years using box plots
-for var in clinical_indicators:
-    plt.figure(figsize=(10, 6))
-    sns.boxplot(x='year', y=var, data=df_after_2018)
-    plt.title(f'Distribution of {var} Across Years (2018-2023)')
-    plt.xlabel('Year')
-    plt.ylabel(var)
-    plt.show()
+# for var in clinical_indicators:
+#     plt.figure(figsize=(10, 6))
+#     sns.boxplot(x='year', y=var, data=df_after_2018)
+#     plt.title(f'Distribution of {var} Across Years (2018-2023)')
+#     plt.xlabel('Year')
+#     plt.ylabel(var)
+#     plt.show()
 
 

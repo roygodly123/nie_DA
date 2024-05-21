@@ -56,4 +56,6 @@ for column in columns_to_clean:
     df[column] = pd.to_numeric(df[column], errors='coerce')
 
 cleaned_file_path = 'csv/data_nie_cleaned_file.csv'
-df.to_csv(cleaned_file_path, index=False)
+optional_cleaned_file_path = 'csv/(optional) data_nie_cleaned_file.csv'
+df.to_csv(cleaned_file_path, index=False, encoding='utf-8-sig')
+df.to_csv(optional_cleaned_file_path, index=False, encoding='ansi')

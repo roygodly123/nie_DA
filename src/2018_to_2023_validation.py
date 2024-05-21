@@ -13,7 +13,7 @@ def format_p_value(p_value):
     else:
         return round(p_value, 4)
 
-df = pd.read_csv('../csv/data_nie_cleaned_file.csv')
+df = pd.read_csv('csv/data_nie_cleaned_file.csv')
 groups = [2018, 2019, 2020, 2021, 2022, 2023]
 df_after_2018 = df[df['year'] >= 2018]
 df_after_2018_general_data = df[df['year'] >= 2018]
@@ -70,6 +70,7 @@ for (year1, year2) in combinations:
     results.append(general_results_pair)
 
 after_2018_general_indicator_results = pd.DataFrame(results)
-after_2018_general_indicator_results.to_csv('../results/4. after_2018_general_data_validation.csv', index=False, encoding='ansi')
+after_2018_general_indicator_results.to_csv('results/4. after_2018_general_data_validation.csv', index=False, encoding='utf-8')
+after_2018_general_indicator_results.to_csv('results/(optional) 4. after_2018_general_data_validation.csv', index=False, encoding='ansi')
 print("\nGenerated Results Table:")
 print(after_2018_general_indicator_results)

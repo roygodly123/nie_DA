@@ -9,7 +9,7 @@ plt.rcParams['font.sans-serif'] = ['SimHei']
 plt.rcParams['axes.unicode_minus'] = False
 
 # Read file and clean data which include strange values
-df = pd.read_csv('../csv/data_nie_cleaned_file.csv')
+df = pd.read_csv('csv/data_nie_cleaned_file.csv')
 df_before_2018 = df[df['year'] < 2018]
 df_after_2018 = df[df['year'] >= 2018]
 df['period'] = df['year'].apply(lambda x: 'Before 2018' if x < 2018 else 'After 2018')
@@ -42,8 +42,8 @@ results_df['Significant'] = results_df['p_value'].apply(lambda x: 'Yes' if x < a
 results_df['p_value'] = results_df['p_value'].apply(lambda x: round(x, 3) if pd.notnull(x) else x)
 
 # Print and save the results
-print(results_df)
-results_df.to_csv('../results/2. before_and_after_2018_general_data.csv', encoding='ansi')
+results_df.to_csv('results/(optional) 2. before_and_after_2018_general_data.csv', encoding='ansi', index=False)
+results_df.to_csv('results/2. before_and_after_2018_general_data.csv', encoding='utf-8', index=False)
 
 # Print results with interpretation
 for indicator, row in results_df.iterrows():
