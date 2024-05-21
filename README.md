@@ -11,12 +11,11 @@
 1. Clone the repository:
    ```sh
    git clone https://github.com/roygodly123/nie_DA.git
+   ```sh
    cd nie_DA.git
 2. navigate to virtual env.
 3. ```sh
    pip install -r requirements.txt
-   
-   
 ### Usage
 1. The csv file directory includes original dataset and cleaned file.
 2. The src file directory includes all source code for manipulating the data.
