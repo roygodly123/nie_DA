@@ -1,9 +1,6 @@
 import itertools
 import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
-from scipy.stats import ttest_ind, chi2_contingency
+from scipy.stats import f_oneway, ttest_ind, chi2_contingency
 
 def format_p_value(p_value):
     if p_value < 0.0001:
@@ -13,64 +10,50 @@ def format_p_value(p_value):
     else:
         return round(p_value, 4)
 
+# Load the dataset
 df = pd.read_csv('csv/data_nie_cleaned_file.csv')
-groups = [2018, 2019, 2020, 2021, 2022, 2023]
-df_after_2018 = df[df['year'] >= 2018]
-df_after_2018_general_data = df[df['year'] >= 2018]
-df_after_2018 = df_after_2018.drop(columns='住院号').drop(columns='姓名').drop(columns='年龄').drop(columns='性别').drop(
-    columns='吸烟').drop(columns='treat').drop(columns='高血压').drop(columns='糖尿病').drop(columns='高血脂')
-indicators = df_after_2018.columns.tolist()
-grouped_data = {}
-for group in groups:
-    filtered_data = df_after_2018[df_after_2018['year'] == group]
-    grouped_data[group] = filtered_data
 
-# general indicators significance test
-# 对每对年份进行两两比较
-combinations = list(itertools.combinations(groups, 2))
+# Filter the data for years starting from 2016
+df_after_2016 = df[df['year'] >= 2016].copy()
 
-results = []
-for (year1, year2) in combinations:
-    print(f"\nAnalysis for {year1} vs {year2}:")
+# Drop specific columns from the dataframe
+columns_to_drop = ['住院号', '姓名', 'treat']  # Columns not needed for analysis
+df_after_2016 = df_after_2016.drop(columns=columns_to_drop)
 
-    df_year1 = df[df['year'] == year1].copy()
-    df_year2 = df[df['year'] == year2].copy()
+# Define groups for the analysis
+groups = df_after_2016['year'].unique()
 
-    # 添加标识列
-    df_year1['year_group'] = f'{year1}'
-    df_year2['year_group'] = f'{year2}'
+# Initialize results dictionary for pairwise comparison
+results_pairwise = {}
 
-    # 合并数据
-    df_combined = pd.concat([df_year1, df_year2])
+# Perform statistical analysis for each pair of years
+for (year1, year2) in itertools.combinations(groups, 2):
+    df_year1 = df_after_2016[df_after_2016['year'] == year1].copy()
+    df_year2 = df_after_2016[df_after_2016['year'] == year2].copy()
 
-    # 对一般指标进行统计分析
-    general_results_pair = {'year1': year1, 'year2': year2}
+    # Continuous Variables (t-test)
+    for var in ['年龄']:
+        data1 = df_year1[var].dropna()
+        data2 = df_year2[var].dropna()
+        if not data1.empty and not data2.empty:
+            p_value = ttest_ind(data1, data2)[1]
+            indicator_key = f'{year1} vs {year2}'
+            results_pairwise.setdefault(indicator_key, {})[var] = format_p_value(p_value)
 
-    # 分析年龄（连续变量）
-    if not df_year1['年龄'].dropna().empty and not df_year2['年龄'].dropna().empty:
-        age_p_value = ttest_ind(df_year1['年龄'].dropna(), df_year2['年龄'].dropna())[1]
-        general_results_pair['年龄'] = format_p_value(age_p_value)
-        print(f"P-value for 年龄 comparison between {year1} and {year2}: {general_results_pair['年龄']}")
-    else:
-        general_results_pair['年龄'] = None
-        print(f"No data available for 年龄 comparison between {year1} and {year2}")
-
-    # 分析性别、吸烟、高血压、糖尿病、高血脂（分类变量）
+    # Categorical Variables (Chi-square Test)
     categorical_variables = ['性别', '吸烟', '高血压', '糖尿病', '高血脂']
     for var in categorical_variables:
-        contingency_table = pd.crosstab(df_combined['year_group'], df_combined[var])
-        if contingency_table.size > 0:
-            _, p_value, _, _ = chi2_contingency(contingency_table)
-            general_results_pair[var] = format_p_value(p_value)
-            print(f"P-value for {var} comparison between {year1} and {year2}: {general_results_pair[var]}")
-        else:
-            general_results_pair[var] = None
-            print(f"No data available for {var} comparison between {year1} and {year2}")
+        contingency_table = pd.crosstab(df_after_2016['year'], df_after_2016[var])
+        _, p_value, _, _ = chi2_contingency(contingency_table)
+        indicator_key = f'{year1} vs {year2}'
+        results_pairwise.setdefault(indicator_key, {})[var] = format_p_value(p_value)
 
-    results.append(general_results_pair)
+# Convert results to DataFrame for pairwise comparison
+results_pairwise_df = pd.DataFrame.from_dict(results_pairwise, orient='index')
 
-after_2018_general_indicator_results = pd.DataFrame(results)
-after_2018_general_indicator_results.to_csv('results/4. after_2018_general_data_validation.csv', index=False, encoding='utf-8')
-after_2018_general_indicator_results.to_csv('results/(optional) 4. after_2018_general_data_validation.csv', index=False, encoding='ansi')
-print("\nGenerated Results Table:")
-print(after_2018_general_indicator_results)
+# Save results to CSV file
+results_pairwise_df.to_csv('results/pairwise_comparison_results.csv', index=True, encoding='utf-8')
+
+# Print the generated results table
+print("\nPairwise Comparison Results:")
+print(results_pairwise_df)

@@ -17,7 +17,7 @@ def clean_data(value):
     if isinstance(value, str):
         try:
             # 替换逗号为小数点
-            value = value.replace(',', '.').strip()
+            value = value.replace(',', '').strip()
             print(f"替换小数点: {value}")
 
             # 删除无意义的字符
